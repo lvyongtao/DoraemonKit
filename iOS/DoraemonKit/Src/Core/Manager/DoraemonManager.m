@@ -142,6 +142,7 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
 
     [self initEntry:self.startingPosition];
     
+     
     //根据开关判断是否收集Crash日志
     if ([[DoraemonCacheManager sharedInstance] crashSwitch]) {
         [DoraemonCrashUncaughtExceptionHandler registerHandler];
@@ -192,12 +193,12 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
     }
     
     //统计开源项目使用量 不用于任何恶意行为
-    [[DoraemonStatisticsUtil shareInstance] upLoadUserInfo];
+//    [[DoraemonStatisticsUtil shareInstance] upLoadUserInfo];
     
     //拉取最新的mock数据
-    [[DoraemonMockManager sharedInstance] queryMockData:^(int flag) {
-        DoKitLog(@"mock get data, flag == %i",flag);
-    }];
+//    [[DoraemonMockManager sharedInstance] queryMockData:^(int flag) {
+//        DoKitLog(@"mock get data, flag == %i",flag);
+//    }];
     
     //Weex工具的初始化
 #if DoraemonWithWeex
@@ -206,9 +207,9 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
 #endif
     
     //开启健康体检
-    if ([[DoraemonCacheManager sharedInstance] healthStart]) {
-        [[DoraemonHealthManager sharedInstance] startHealthCheck];
-    }
+//    if ([[DoraemonCacheManager sharedInstance] healthStart]) {
+//        [[DoraemonHealthManager sharedInstance] startHealthCheck];
+//    }
     
 }
 
@@ -218,10 +219,10 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
  */
 - (void)initData{
     #pragma mark - 平台工具
-    [self addPluginWithPluginType:DoraemonManagerPluginType_DoraemonMockPlugin];
-    [self addPluginWithPluginType:DoraemonManagerPluginType_DoraemonHealthPlugin];
-    [self addPluginWithPluginType:DoraemonManagerPluginType_DoraemonFileSyncPlugin];
-    
+//    [self addPluginWithPluginType:DoraemonManagerPluginType_DoraemonMockPlugin];
+//    [self addPluginWithPluginType:DoraemonManagerPluginType_DoraemonHealthPlugin];
+//    [self addPluginWithPluginType:DoraemonManagerPluginType_DoraemonFileSyncPlugin];
+//
     #pragma mark - 常用工具
     [self addPluginWithPluginType:DoraemonManagerPluginType_DoraemonAppSettingPlugin];
     [self addPluginWithPluginType:DoraemonManagerPluginType_DoraemonAppInfoPlugin];
@@ -387,10 +388,13 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
     if (!_dataArray){
         _dataArray = [[NSMutableArray alloc]init];
     }
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    [dic setValue:moduleName forKey:@"moduleName"];
-    [dic setValue:array forKey:@"pluginArray"];
-    [_dataArray addObject:dic];
+    if (moduleName.length > 0 && array.count > 0) {
+        NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+        [dic setValue:moduleName forKey:@"moduleName"];
+        [dic setValue:array forKey:@"pluginArray"];
+        [_dataArray addObject:dic];
+    }
+
 }
 
 - (void)unregisterPlugin:(NSString*)pluginName withModule:(NSString*)moduleName{
@@ -572,30 +576,30 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
                            ],
                            
                            // 性能检测
-                           @(DoraemonManagerPluginType_DoraemonFPSPlugin) : @[
-                                   @{kTitle:DoraemonLocalizedString(@"帧率")},
-                                   @{kDesc:DoraemonLocalizedString(@"帧率")},
-                                   @{kIcon:@"doraemon_fps"},
-                                   @{kPluginName:@"DoraemonFPSPlugin"},
-                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
-                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_fps"}
-                                   ],
-                           @(DoraemonManagerPluginType_DoraemonCPUPlugin) : @[
-                                   @{kTitle:@"CPU"},
-                                   @{kDesc:DoraemonLocalizedString(@"CPU")},
-                                   @{kIcon:@"doraemon_cpu"},
-                                   @{kPluginName:@"DoraemonCPUPlugin"},
-                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
-                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_cpu"}
-                                   ],
-                           @(DoraemonManagerPluginType_DoraemonMemoryPlugin) : @[
-                                   @{kTitle:DoraemonLocalizedString(@"内存")},
-                                   @{kDesc:DoraemonLocalizedString(@"内存")},
-                                   @{kIcon:@"doraemon_memory"},
-                                   @{kPluginName:@"DoraemonMemoryPlugin"},
-                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
-                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_arm"}
-                                   ],
+//                           @(DoraemonManagerPluginType_DoraemonFPSPlugin) : @[
+//                                   @{kTitle:DoraemonLocalizedString(@"帧率")},
+//                                   @{kDesc:DoraemonLocalizedString(@"帧率")},
+//                                   @{kIcon:@"doraemon_fps"},
+//                                   @{kPluginName:@"DoraemonFPSPlugin"},
+//                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
+//                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_fps"}
+//                                   ],
+//                           @(DoraemonManagerPluginType_DoraemonCPUPlugin) : @[
+//                                   @{kTitle:@"CPU"},
+//                                   @{kDesc:DoraemonLocalizedString(@"CPU")},
+//                                   @{kIcon:@"doraemon_cpu"},
+//                                   @{kPluginName:@"DoraemonCPUPlugin"},
+//                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
+//                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_cpu"}
+//                                   ],
+//                           @(DoraemonManagerPluginType_DoraemonMemoryPlugin) : @[
+//                                   @{kTitle:DoraemonLocalizedString(@"内存")},
+//                                   @{kDesc:DoraemonLocalizedString(@"内存")},
+//                                   @{kIcon:@"doraemon_memory"},
+//                                   @{kPluginName:@"DoraemonMemoryPlugin"},
+//                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
+//                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_arm"}
+//                                   ],
                            @(DoraemonManagerPluginType_DoraemonNetFlowPlugin) : @[
                                    @{kTitle:DoraemonLocalizedString(@"网络")},
                                    @{kDesc:DoraemonLocalizedString(@"网络监控")},
@@ -620,39 +624,39 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
                                    @{kAtModule:DoraemonLocalizedString(@"性能检测")},
                                    @{kBuriedPoint:@"dokit_sdk_comm_ck_child_thread"}
                                    ],
-                           @(DoraemonManagerPluginType_DoraemonANRPlugin) : @[
-                                   @{kTitle:DoraemonLocalizedString(@"卡顿")},
-                                   @{kDesc:DoraemonLocalizedString(@"卡顿")},
-                                   @{kIcon:@"doraemon_kadun"},
-                                   @{kPluginName:@"DoraemonANRPlugin"},
-                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
-                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_block"}
-                                   ],
-                           @(DoraemonManagerPluginType_DoraemonMethodUseTimePlugin) : @[
-                                   @{kTitle:DoraemonLocalizedString(@"Load耗时")},
-                                   @{kDesc:DoraemonLocalizedString(@"Load耗时")},
-                                   @{kIcon:@"doraemon_method_use_time"},
-                                   @{kPluginName:@"DoraemonMethodUseTimePlugin"},
-                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
-                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_load"}
-                                   ],
+//                           @(DoraemonManagerPluginType_DoraemonANRPlugin) : @[
+//                                   @{kTitle:DoraemonLocalizedString(@"卡顿")},
+//                                   @{kDesc:DoraemonLocalizedString(@"卡顿")},
+//                                   @{kIcon:@"doraemon_kadun"},
+//                                   @{kPluginName:@"DoraemonANRPlugin"},
+//                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
+//                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_block"}
+//                                   ],
+//                           @(DoraemonManagerPluginType_DoraemonMethodUseTimePlugin) : @[
+//                                   @{kTitle:DoraemonLocalizedString(@"Load耗时")},
+//                                   @{kDesc:DoraemonLocalizedString(@"Load耗时")},
+//                                   @{kIcon:@"doraemon_method_use_time"},
+//                                   @{kPluginName:@"DoraemonMethodUseTimePlugin"},
+//                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
+//                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_load"}
+//                                   ],
                            
-                           @(DoraemonManagerPluginType_DoraemonLargeImageFilter) : @[
-                                   @{kTitle:DoraemonLocalizedString(@"大图检测")},
-                                   @{kDesc:DoraemonLocalizedString(@"大图检测")},
-                                   @{kIcon:@"doraemon_net"},
-                                   @{kPluginName:@"DoraemonLargeImagePlugin"},
-                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
-                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_img"}
-                                   ],
-                           @(DoraemonManagerPluginType_DoraemonStartTimePlugin) : @[
-                                   @{kTitle:DoraemonLocalizedString(@"启动耗时")},
-                                   @{kDesc:DoraemonLocalizedString(@"启动耗时")},
-                                   @{kIcon:@"doraemon_app_start_time"},
-                                   @{kPluginName:@"DoraemonStartTimePlugin"},
-                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
-                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_appstart_coast"}
-                                   ],
+//                           @(DoraemonManagerPluginType_DoraemonLargeImageFilter) : @[
+//                                   @{kTitle:DoraemonLocalizedString(@"大图检测")},
+//                                   @{kDesc:DoraemonLocalizedString(@"大图检测")},
+//                                   @{kIcon:@"doraemon_net"},
+//                                   @{kPluginName:@"DoraemonLargeImagePlugin"},
+//                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
+//                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_img"}
+//                                   ],
+//                           @(DoraemonManagerPluginType_DoraemonStartTimePlugin) : @[
+//                                   @{kTitle:DoraemonLocalizedString(@"启动耗时")},
+//                                   @{kDesc:DoraemonLocalizedString(@"启动耗时")},
+//                                   @{kIcon:@"doraemon_app_start_time"},
+//                                   @{kPluginName:@"DoraemonStartTimePlugin"},
+//                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
+//                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_appstart_coast"}
+//                                   ],
                            @(DoraemonManagerPluginType_DoraemonMemoryLeakPlugin) : @[
                                    @{kTitle:DoraemonLocalizedString(@"内存泄漏")},
                                    @{kDesc:DoraemonLocalizedString(@"内存泄漏统计")},
@@ -661,96 +665,96 @@ typedef void (^DoraemonPerformanceBlock)(NSDictionary *);
                                    @{kAtModule:DoraemonLocalizedString(@"性能检测")},
                                    @{kBuriedPoint:@"dokit_sdk_performance_ck_leak"}
                                    ],
-                           @(DoraemonManagerPluginType_DoraemonUIProfilePlugin) : @[
-                                   @{kTitle:DoraemonLocalizedString(@"UI层级")},
-                                   @{kDesc:DoraemonLocalizedString(@"UI层级s")},
-                                   @{kIcon:@"doraemon_view_level"},
-                                   @{kPluginName:@"DoraemonUIProfilePlugin"},
-                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
-                                   @{kBuriedPoint:@"dokit_sdk_ui_ck_hierarchy"}
-                           ],
-                           @(DoraemonManagerPluginType_DoraemonTimeProfilePlugin) : @[
-                                   @{kTitle:DoraemonLocalizedString(@"函数耗时")},
-                                   @{kDesc:DoraemonLocalizedString(@"函数耗时统计")},
-                                   @{kIcon:@"doraemon_time_profiler"},
-                                   @{kPluginName:@"DoraemonTimeProfilerPlugin"},
-                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
-                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_method_coast"}
-                           ],
-                           @(DoraemonManagerPluginType_DoraemonWeakNetworkPlugin) : @[
-                                     @{kTitle:DoraemonLocalizedString(@"模拟弱网")},
-                                     @{kDesc:DoraemonLocalizedString(@"模拟弱网测试")},
-                                     @{kIcon:@"doraemon_weaknet"},
-                                     @{kPluginName:@"DoraemonWeakNetworkPlugin"},
-                                     @{kAtModule:DoraemonLocalizedString(@"性能检测")},
-                                     @{kBuriedPoint:@"dokit_sdk_comm_ck_weaknetwork"}
-                             ],
+//                           @(DoraemonManagerPluginType_DoraemonUIProfilePlugin) : @[
+//                                   @{kTitle:DoraemonLocalizedString(@"UI层级")},
+//                                   @{kDesc:DoraemonLocalizedString(@"UI层级s")},
+//                                   @{kIcon:@"doraemon_view_level"},
+//                                   @{kPluginName:@"DoraemonUIProfilePlugin"},
+//                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
+//                                   @{kBuriedPoint:@"dokit_sdk_ui_ck_hierarchy"}
+//                           ],
+//                           @(DoraemonManagerPluginType_DoraemonTimeProfilePlugin) : @[
+//                                   @{kTitle:DoraemonLocalizedString(@"函数耗时")},
+//                                   @{kDesc:DoraemonLocalizedString(@"函数耗时统计")},
+//                                   @{kIcon:@"doraemon_time_profiler"},
+//                                   @{kPluginName:@"DoraemonTimeProfilerPlugin"},
+//                                   @{kAtModule:DoraemonLocalizedString(@"性能检测")},
+//                                   @{kBuriedPoint:@"dokit_sdk_performance_ck_method_coast"}
+//                           ],
+//                           @(DoraemonManagerPluginType_DoraemonWeakNetworkPlugin) : @[
+//                                     @{kTitle:DoraemonLocalizedString(@"模拟弱网")},
+//                                     @{kDesc:DoraemonLocalizedString(@"模拟弱网测试")},
+//                                     @{kIcon:@"doraemon_weaknet"},
+//                                     @{kPluginName:@"DoraemonWeakNetworkPlugin"},
+//                                     @{kAtModule:DoraemonLocalizedString(@"性能检测")},
+//                                     @{kBuriedPoint:@"dokit_sdk_comm_ck_weaknetwork"}
+//                             ],
                            // 视觉工具
-                           @(DoraemonManagerPluginType_DoraemonColorPickPlugin) : @[
-                                   @{kTitle:DoraemonLocalizedString(@"取色器")},
-                                   @{kDesc:DoraemonLocalizedString(@"取色器")},
-                                   @{kIcon:@"doraemon_straw"},
-                                   @{kPluginName:@"DoraemonColorPickPlugin"},
-                                   @{kAtModule:DoraemonLocalizedString(@"视觉工具")},
-                                   @{kBuriedPoint:@"dokit_sdk_ui_ck_color_pick"}
-                                   ],
-                           @(DoraemonManagerPluginType_DoraemonViewCheckPlugin) : @[
-                                   @{kTitle:DoraemonLocalizedString(@"组件检查")},
-                                   @{kDesc:DoraemonLocalizedString(@"组件检查")},
-                                   @{kIcon:@"doraemon_view_check"},
-                                   @{kPluginName:@"DoraemonViewCheckPlugin"},
-                                   @{kAtModule:DoraemonLocalizedString(@"视觉工具")},
-                                   @{kBuriedPoint:@"dokit_sdk_ui_ck_widget"}
-                                   ],
-                           @(DoraemonManagerPluginType_DoraemonViewAlignPlugin) : @[
-                                   @{kTitle:DoraemonLocalizedString(@"对齐标尺")},
-                                   @{kDesc:DoraemonLocalizedString(@"对齐标尺")},
-                                   @{kIcon:@"doraemon_align"},
-                                   @{kPluginName:@"DoraemonViewAlignPlugin"},
-                                   @{kAtModule:DoraemonLocalizedString(@"视觉工具")},
-                                   @{kBuriedPoint:@"dokit_sdk_ui_ck_aligin_scaleplate"}
-                                   ],
-                           @(DoraemonManagerPluginType_DoraemonViewMetricsPlugin) : @[
-                                   @{kTitle:DoraemonLocalizedString(@"布局边框")},
-                                   @{kDesc:DoraemonLocalizedString(@"布局边框")},
-                                   @{kIcon:@"doraemon_viewmetrics"},
-                                   @{kPluginName:@"DoraemonViewMetricsPlugin"},
-                                   @{kAtModule:DoraemonLocalizedString(@"视觉工具")},
-                                   @{kBuriedPoint:@"dokit_sdk_ui_ck_border"}
-                                   ],
-                          @(DoraemonManagerPluginType_DoraemonHierarchyPlugin) : @[
-                                           @{kTitle:DoraemonLocalizedString(@"UI结构")},
-                                           @{kDesc:DoraemonLocalizedString(@"显示UI结构")},
-                                           @{kIcon:@"doraemon_view_level"},
-                                           @{kPluginName:@"DoraemonHierarchyPlugin"},
-                                           @{kAtModule:DoraemonLocalizedString(@"视觉工具")},
-                                           @{kBuriedPoint:@"dokit_sdk_ui_ck_widget_3d"}
-                                   ],
+//                           @(DoraemonManagerPluginType_DoraemonColorPickPlugin) : @[
+//                                   @{kTitle:DoraemonLocalizedString(@"取色器")},
+//                                   @{kDesc:DoraemonLocalizedString(@"取色器")},
+//                                   @{kIcon:@"doraemon_straw"},
+//                                   @{kPluginName:@"DoraemonColorPickPlugin"},
+//                                   @{kAtModule:DoraemonLocalizedString(@"视觉工具")},
+//                                   @{kBuriedPoint:@"dokit_sdk_ui_ck_color_pick"}
+//                                   ],
+//                           @(DoraemonManagerPluginType_DoraemonViewCheckPlugin) : @[
+//                                   @{kTitle:DoraemonLocalizedString(@"组件检查")},
+//                                   @{kDesc:DoraemonLocalizedString(@"组件检查")},
+//                                   @{kIcon:@"doraemon_view_check"},
+//                                   @{kPluginName:@"DoraemonViewCheckPlugin"},
+//                                   @{kAtModule:DoraemonLocalizedString(@"视觉工具")},
+//                                   @{kBuriedPoint:@"dokit_sdk_ui_ck_widget"}
+//                                   ],
+//                           @(DoraemonManagerPluginType_DoraemonViewAlignPlugin) : @[
+//                                   @{kTitle:DoraemonLocalizedString(@"对齐标尺")},
+//                                   @{kDesc:DoraemonLocalizedString(@"对齐标尺")},
+//                                   @{kIcon:@"doraemon_align"},
+//                                   @{kPluginName:@"DoraemonViewAlignPlugin"},
+//                                   @{kAtModule:DoraemonLocalizedString(@"视觉工具")},
+//                                   @{kBuriedPoint:@"dokit_sdk_ui_ck_aligin_scaleplate"}
+//                                   ],
+//                           @(DoraemonManagerPluginType_DoraemonViewMetricsPlugin) : @[
+//                                   @{kTitle:DoraemonLocalizedString(@"布局边框")},
+//                                   @{kDesc:DoraemonLocalizedString(@"布局边框")},
+//                                   @{kIcon:@"doraemon_viewmetrics"},
+//                                   @{kPluginName:@"DoraemonViewMetricsPlugin"},
+//                                   @{kAtModule:DoraemonLocalizedString(@"视觉工具")},
+//                                   @{kBuriedPoint:@"dokit_sdk_ui_ck_border"}
+//                                   ],
+//                          @(DoraemonManagerPluginType_DoraemonHierarchyPlugin) : @[
+//                                           @{kTitle:DoraemonLocalizedString(@"UI结构")},
+//                                           @{kDesc:DoraemonLocalizedString(@"显示UI结构")},
+//                                           @{kIcon:@"doraemon_view_level"},
+//                                           @{kPluginName:@"DoraemonHierarchyPlugin"},
+//                                           @{kAtModule:DoraemonLocalizedString(@"视觉工具")},
+//                                           @{kBuriedPoint:@"dokit_sdk_ui_ck_widget_3d"}
+//                                   ],
                            // 平台工具
-                           @(DoraemonManagerPluginType_DoraemonMockPlugin) : @[
-                                @{kTitle:DoraemonLocalizedString(@"Mock数据")},
-                                   @{kDesc:DoraemonLocalizedString(@"Mock数据")},
-                                   @{kIcon:@"doraemon_mock"},
-                                   @{kPluginName:@"DoraemonMockPlugin"},
-                                   @{kAtModule:DoraemonLocalizedString(@"平台工具")},
-                                   @{kBuriedPoint:@"dokit_sdk_platform_ck_mock"}
-                                   ],
-                           @(DoraemonManagerPluginType_DoraemonHealthPlugin) : @[
-                               @{kTitle:DoraemonLocalizedString(@"健康体检")},
-                                  @{kDesc:DoraemonLocalizedString(@"健康体检中心")},
-                                  @{kIcon:@"doraemon_health"},
-                                  @{kPluginName:@"DoraemonHealthPlugin"},
-                                  @{kAtModule:DoraemonLocalizedString(@"平台工具")},
-                                  @{kBuriedPoint:@"dokit_sdk_platform_ck_health"}
-                                  ],
-                           @(DoraemonManagerPluginType_DoraemonFileSyncPlugin) : @[
-                                @{kTitle:DoraemonLocalizedString(@"文件同步")},
-                                    @{kDesc:DoraemonLocalizedString(@"文件同步")},
-                                    @{kIcon:@"doraemon_file_sync"},
-                                    @{kPluginName:@"DoraemonFileSyncPlugin"},
-                                    @{kAtModule:DoraemonLocalizedString(@"平台工具")},
-                                    @{kBuriedPoint:@"dokit_sdk_platform_ck_filesync"}
-                                    ]
+//                           @(DoraemonManagerPluginType_DoraemonMockPlugin) : @[
+//                                @{kTitle:DoraemonLocalizedString(@"Mock数据")},
+//                                   @{kDesc:DoraemonLocalizedString(@"Mock数据")},
+//                                   @{kIcon:@"doraemon_mock"},
+//                                   @{kPluginName:@"DoraemonMockPlugin"},
+//                                   @{kAtModule:DoraemonLocalizedString(@"平台工具")},
+//                                   @{kBuriedPoint:@"dokit_sdk_platform_ck_mock"}
+//                                   ],
+//                           @(DoraemonManagerPluginType_DoraemonHealthPlugin) : @[
+//                               @{kTitle:DoraemonLocalizedString(@"健康体检")},
+//                                  @{kDesc:DoraemonLocalizedString(@"健康体检中心")},
+//                                  @{kIcon:@"doraemon_health"},
+//                                  @{kPluginName:@"DoraemonHealthPlugin"},
+//                                  @{kAtModule:DoraemonLocalizedString(@"平台工具")},
+//                                  @{kBuriedPoint:@"dokit_sdk_platform_ck_health"}
+//                                  ],
+//                           @(DoraemonManagerPluginType_DoraemonFileSyncPlugin) : @[
+//                                @{kTitle:DoraemonLocalizedString(@"文件同步")},
+//                                    @{kDesc:DoraemonLocalizedString(@"文件同步")},
+//                                    @{kIcon:@"doraemon_file_sync"},
+//                                    @{kPluginName:@"DoraemonFileSyncPlugin"},
+//                                    @{kAtModule:DoraemonLocalizedString(@"平台工具")},
+//                                    @{kBuriedPoint:@"dokit_sdk_platform_ck_filesync"}
+//                                    ]
                            }[@(pluginType)];
     
     DoraemonManagerPluginTypeModel *model = [DoraemonManagerPluginTypeModel new];
